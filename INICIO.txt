@@ -1,0 +1,21 @@
+IAF Aesthetic - como arrancar bien
+================================
+
+1. Cierra pestañas de localhost en el navegador.
+
+2. En terminal, desde esta carpeta (C:\dev\IAF):
+
+   npm run dev:fresh
+
+   Debe decir: Local: http://localhost:3000
+   (NO uses el puerto 3001 ni la carpeta IsaGastos)
+
+3. Abre SOLO: http://localhost:3000
+
+4. Recarga forzada: Ctrl + Shift + R
+
+Si ves texto plano sin colores: estas en el puerto equivocado o con cache vieja.
+
+Imagenes opcionales (copiar a public\images\):
+  logo-iaf.png, iaf-flyer.png, resultados-tratamiento.png, tratamiento-cabina.jpg
+El logo SVG ya incluido funciona sin esos archivos.

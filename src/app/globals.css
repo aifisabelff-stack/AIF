@@ -1,0 +1,264 @@
+@import "tailwindcss";
+
+@theme {
+  /* Paleta IAF Aesthetic — flyer crema, rosa nude, oro */
+  --color-cream-50: #faf9f6;
+  --color-cream-100: #f9f6f2;
+  --color-cream-200: #efe8de;
+  --color-cream-300: #e5ddd2;
+  --color-iaf-50: #faf7f5;
+  --color-iaf-100: #f5eeea;
+  --color-iaf-200: #e8ddd6;
+  --color-iaf-300: #d4c4b8;
+  --color-iaf-400: #c9a89e;
+  --color-iaf-500: #b89088;
+  --color-iaf-600: #9a756e;
+  --color-iaf-700: #7d5f58;
+  --color-iaf-800: #5c4843;
+  --color-iaf-900: #4a4543;
+  --color-iaf-950: #2e2a28;
+  --color-blush-50: #fffaf8;
+  --color-blush-100: #fff5f2;
+  --color-gold-200: #f0e6d4;
+  --color-gold-300: #e8d4b8;
+  --color-gold-400: #c4a574;
+  --color-gold-500: #b8956f;
+  --color-gold-600: #9a7b4f;
+  --color-gold-700: #7d6340;
+  --color-rose-btn: #c9a89e;
+  --color-rose-btn-hover: #b89088;
+  --color-charcoal: #4a4543;
+  --color-pearl-100: #fffcfa;
+  --font-display: var(--font-cormorant), Georgia, serif;
+  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
+  --font-script: var(--font-great-vibes), cursive;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-cream-50);
+  color: var(--color-charcoal);
+  min-height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 90% 10%, rgba(196, 165, 116, 0.15), transparent),
+    radial-gradient(ellipse 50% 40% at 5% 90%, rgba(201, 168, 158, 0.12), transparent);
+  z-index: 0;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-script {
+  font-family: var(--font-script);
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+/* Página de inicio — estilo flyer */
+.landing-page {
+  background: linear-gradient(
+    180deg,
+    var(--color-cream-100) 0%,
+    var(--color-cream-50) 35%,
+    var(--color-blush-50) 70%,
+    var(--color-cream-200) 100%
+  );
+}
+
+.landing-gold-line {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-gold-400) 20%,
+    var(--color-gold-500) 50%,
+    var(--color-gold-400) 80%,
+    transparent
+  );
+}
+
+.landing-card {
+  border: 1px solid rgba(196, 165, 116, 0.25);
+  background: rgba(255, 252, 250, 0.92);
+  backdrop-filter: blur(8px);
+}
+
+/* Altura uniforme: Ice Glow, Resultados y Terapias */
+.landing-feature-card {
+  min-height: 23rem;
+}
+
+@media (min-width: 640px) {
+  .landing-feature-card {
+    min-height: 25rem;
+  }
+}
+
+.landing-step-icon {
+  color: var(--color-gold-600);
+  background: linear-gradient(135deg, var(--color-gold-200), var(--color-cream-200));
+  border: 1px solid rgba(196, 165, 116, 0.35);
+}
+
+/* Marco del logo - integrado, no pegado */
+.logo-frame {
+  isolation: isolate;
+  transition: box-shadow 0.35s ease, transform 0.35s ease;
+}
+
+.logo-frame:hover {
+  box-shadow:
+    0 4px 24px -4px rgba(139, 94, 60, 0.14),
+    0 24px 56px -12px rgba(154, 123, 79, 0.22);
+}
+
+/* Recortes del flyer oficial */
+.flyer-hero-top {
+  background: linear-gradient(
+    180deg,
+    var(--color-cream-200) 0%,
+    var(--color-blush-50) 100%
+  );
+}
+
+.flyer-results-bg {
+  background: linear-gradient(135deg, var(--color-gold-200), var(--color-cream-100));
+}
+
+/* Secciones con imagen a la derecha y fundido al fondo crema */
+.landing-side-visual {
+  overflow: hidden;
+  /* pointer-events no se hereda: hijos (img, fade) no deben bloquear enlaces */
+  pointer-events: none;
+}
+
+.landing-side-visual * {
+  pointer-events: none;
+}
+
+.landing-side-visual-img {
+  display: block;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.landing-side-visual-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    #fffcfa 0%,
+    rgba(255, 252, 250, 0.96) 14%,
+    rgba(249, 246, 242, 0.9) 30%,
+    rgba(249, 246, 242, 0.55) 50%,
+    rgba(250, 249, 246, 0.15) 68%,
+    transparent 82%
+  );
+}
+
+.resultados-visual-img {
+  object-position: left center;
+}
+
+/* La imagen ya trae fundido; refuerzo suave bajo el texto */
+.resultados-visual-fade {
+  background: linear-gradient(
+    90deg,
+    #fffcfa 0%,
+    rgba(255, 252, 250, 0.92) 38%,
+    rgba(249, 246, 242, 0.45) 58%,
+    transparent 72%
+  );
+}
+
+.tratamiento-visual-img {
+  object-position: 72% center;
+}
+
+.terapias-maquina-img {
+  object-position: 58% center;
+}
+
+/* La imagen ya trae fundido blanco a la izquierda; refuerzo suave bajo el texto */
+.terapias-maquina-fade {
+  background: linear-gradient(
+    90deg,
+    #fffcfa 0%,
+    rgba(255, 252, 250, 0.88) 32%,
+    rgba(249, 246, 242, 0.35) 48%,
+    transparent 62%
+  );
+}
+
+@media (max-width: 639px) {
+  .landing-side-visual-fade {
+    background: linear-gradient(
+      180deg,
+      #fffcfa 0%,
+      rgba(255, 252, 250, 0.94) 22%,
+      rgba(249, 246, 242, 0.75) 42%,
+      rgba(249, 246, 242, 0.25) 62%,
+      transparent 78%
+    );
+  }
+
+  .resultados-visual-img {
+    object-position: 35% center;
+  }
+
+  .resultados-visual-fade {
+    background: linear-gradient(
+      180deg,
+      #fffcfa 0%,
+      rgba(255, 252, 250, 0.9) 35%,
+      rgba(249, 246, 242, 0.35) 55%,
+      transparent 75%
+    );
+  }
+
+  .tratamiento-visual-img {
+    object-position: center 55%;
+  }
+
+  .terapias-maquina-img {
+    object-position: 50% 42%;
+  }
+
+  .terapias-maquina-fade {
+    background: linear-gradient(
+      180deg,
+      #fffcfa 0%,
+      rgba(255, 252, 250, 0.92) 30%,
+      rgba(249, 246, 242, 0.4) 52%,
+      transparent 70%
+    );
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
