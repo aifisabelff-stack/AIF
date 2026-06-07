@@ -26,6 +26,7 @@ import {
   floorToQuarter,
 } from "@/lib/agenda-slots";
 import { parseAgendaDate, schedulableDayError } from "@/lib/holidays";
+import { clinicDateTimeToUtc } from "@/lib/clinic-timezone";
 import { bookingDateInWindow, bookingMonthInWindow, bookingWindowError } from "@/lib/booking-window";
 import { searchPatients } from "@/lib/queries";
 import * as appointments from "@/lib/firestore-appointments";
@@ -40,7 +41,7 @@ const BOOKING_ACTIVE_STATUSES_FOR_SLOTS = [
 ] as const;
 
 function combineDateTime(date: string, time: string) {
-  return new Date(`${date}T${time}:00`);
+  return clinicDateTimeToUtc(date, time);
 }
 
 async function assertBookingSlotFree(

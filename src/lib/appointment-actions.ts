@@ -10,6 +10,7 @@ import {
 } from "@/lib/agenda-slots";
 import { bookingDateInWindow, bookingWindowError } from "@/lib/booking-window";
 import { parseAgendaDate, schedulableDayError } from "@/lib/holidays";
+import { clinicDateTimeToUtc } from "@/lib/clinic-timezone";
 import {
   appointmentSchema,
   appointmentUpdateSchema,
@@ -54,7 +55,7 @@ function confirmedAtForStatus(
 }
 
 function combineDateTime(date: string, time: string) {
-  return new Date(`${date}T${time}:00`);
+  return clinicDateTimeToUtc(date, time);
 }
 
 function resolveAppointmentTimes(

@@ -59,6 +59,7 @@ import {
   isSchedulableDay,
   type DayKind,
 } from "@/lib/holidays";
+import { getClinicDateParts } from "@/lib/clinic-timezone";
 import { Button } from "@/components/ui/button";
 import { LinkButton } from "@/components/ui/link-button";
 import {
@@ -190,17 +191,18 @@ function slotTimesForPicker(day: Date, hour: number, minute: number) {
 }
 
 function apptsInQuarter(day: Date, dayAppts: Appt[], hour: number, minute: number) {
-  return dayAppts.filter(
-    (a) => {
-      if (!apptShowsInCalendar(a)) return false;
-      const start = new Date(a.startAt);
-      return start.getHours() === hour && start.getMinutes() === minute;
-    }
-  );
+  const dayKey = format(day, "yyyy-MM-dd");
+  return dayAppts.filter((a) => {
+    if (!apptShowsInCalendar(a)) return false;
+    const { dateKey, hour: apptHour, minute: apptMinute } = getClinicDateParts(
+      new Date(a.startAt)
+    );
+    return dateKey === dayKey && apptHour === hour && apptMinute === minute;
+  });
 }
 
 function apptsInHour(dayAppts: Appt[], hour: number) {
-  return dayAppts.filter((a) => new Date(a.startAt).getHours() === hour);
+  return dayAppts.filter((a) => getClinicDateParts(new Date(a.startAt)).hour === hour);
 }
 
 function isActiveAppt(a: Appt) {
@@ -969,7 +971,7 @@ function HalfDayToggleRow({
         );
         const periodAppts = apptsByDay[dayIndex].filter((a) => {
           if (!isActiveAppt(a)) return false;
-          const h = new Date(a.startAt).getHours();
+          const h = getClinicDateParts(new Date(a.startAt)).hour;
           return period === "morning" ? h < AFTERNOON_START_HOUR : h >= AFTERNOON_START_HOUR;
         });
         const blockable = keysBlockable(keys, allAppointments);
@@ -1136,9 +1138,12 @@ export function WeekCalendar({
   const weekStart = parseISO(weekKey);
   const currentMonthStart = parseISO(`${monthKey}-01`);
   const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
-  const apptsByDay = days.map((day) =>
-    appointments.filter((a) => isSameDay(a.startAt, day))
-  );
+  const apptsByDay = days.map((day) => {
+    const dayKey = format(day, "yyyy-MM-dd");
+    return appointments.filter(
+      (a) => getClinicDateParts(new Date(a.startAt)).dateKey === dayKey
+    );
+  });
   const colSpan = days.length + 1;
 
   const router = useRouter();
@@ -1313,7 +1318,7 @@ export function WeekCalendar({
   const listAppointments = (
     selectedDayKey
       ? appointments.filter(
-          (a) => format(new Date(a.startAt), "yyyy-MM-dd") === selectedDayKey
+          (a) => getClinicDateParts(new Date(a.startAt)).dateKey === selectedDayKey
         )
       : [...appointments]
   ).sort((a, b) => {
@@ -2136,7 +2141,7 @@ export function WeekCalendar({
             )}
           >
             {listAppointments.map((a) => {
-              const h = new Date(a.startAt).getHours();
+              const h = getClinicDateParts(new Date(a.startAt)).hour;
               const period = h < AFTERNOON_START_HOUR ? "Mañana" : "Tarde";
               const kind = getDayKind(new Date(a.startAt));
               const holiday = getHolidayName(new Date(a.startAt));
