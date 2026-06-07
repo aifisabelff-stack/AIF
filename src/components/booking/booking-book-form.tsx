@@ -8,7 +8,7 @@ import { readResponseJson } from "@/lib/http-json";
 import { Button } from "@/components/ui/button";
 import { FieldGroup, Input, Label } from "@/components/ui/input";
 import { DEFAULT_APPOINTMENT_DURATION_MINUTES } from "@/lib/agenda-slots";
-import { cn, fullName } from "@/lib/utils";
+import { cn, fullName, formatBookingSlotLabel } from "@/lib/utils";
 
 type ClientType = "new" | "existing";
 
@@ -133,7 +133,11 @@ export function BookingBookForm({ therapies, onBack, onDone }: Props) {
           ¡Solicitud recibida!
         </p>
         <p className="mt-3 text-sm leading-relaxed text-iaf-700">
-          Hemos registrado su cita. Le contactaremos por teléfono o email.
+          Hemos registrado su cita para el{" "}
+          <strong className="font-semibold text-iaf-900">
+            {formatBookingSlotLabel(selectedDate, selectedTime)}
+          </strong>
+          . Le contactaremos por teléfono o email.
         </p>
         <Button type="button" className="mt-8" onClick={onDone}>
           Aceptar

@@ -39,6 +39,13 @@ export function formatDateTime(date: Date | string) {
   return `${formatDate(date)} ${formatTime(date)}`;
 }
 
+/** Fecha y hora elegidas en el formulario de reserva (yyyy-MM-dd + HH:mm). */
+export function formatBookingSlotLabel(date: string, time: string) {
+  const dayLabel = format(parseISO(date), "EEEE d 'de' MMMM 'de' yyyy", { locale: es });
+  const capitalized = dayLabel.charAt(0).toUpperCase() + dayLabel.slice(1);
+  return `${capitalized} a las ${time}`;
+}
+
 export function formatCurrency(amount: number | null | undefined) {
   if (amount == null) return "—";
   return new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR" }).format(amount);

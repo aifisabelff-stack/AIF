@@ -10,7 +10,7 @@ import { DEFAULT_APPOINTMENT_DURATION_MINUTES } from "@/lib/agenda-slots";
 import { BookingDatePicker } from "@/components/booking/booking-date-picker";
 import { FieldGroup, Input, Label } from "@/components/ui/input";
 import { readResponseJson } from "@/lib/http-json";
-import { cn, fullName } from "@/lib/utils";
+import { cn, fullName, formatBookingSlotLabel } from "@/lib/utils";
 
 type ClientType = "new" | "existing";
 
@@ -259,7 +259,11 @@ export function BookingModal({ open, onClose, therapies, embedded = false }: Pro
               ¡Solicitud recibida!
             </p>
             <p className="mt-3 text-sm leading-relaxed text-iaf-700">
-              Hemos registrado su cita. Le contactaremos por teléfono o email.
+              Hemos registrado su cita para el{" "}
+              <strong className="font-semibold text-iaf-900">
+                {formatBookingSlotLabel(selectedDate, selectedTime)}
+              </strong>
+              . Le contactaremos por teléfono o email.
             </p>
             <Button type="button" className="mt-8" onClick={handleClose}>
               Aceptar
