@@ -20,6 +20,7 @@ import * as appointments from "@/lib/firestore-appointments";
 import { getTherapy } from "@/lib/firestore-therapies";
 import { isBlockedSlot } from "@/lib/firestore-blocked-slots";
 import * as firestoreClients from "@/lib/firestore-clients";
+import { requirePanelSession } from "@/lib/panel-page-auth";
 
 type ApptStatus =
   | "PENDING_CONFIRMATION"
@@ -112,6 +113,7 @@ async function resolveActiveTherapy(therapyId: string) {
 }
 
 export async function createAppointment(formData: FormData) {
+  await requirePanelSession();
   const raw = Object.fromEntries(formData);
   const parsed = appointmentSchema.safeParse(raw);
   if (!parsed.success) throw new Error("Revise los datos de la cita");
@@ -154,6 +156,7 @@ export async function createAppointment(formData: FormData) {
 
 /** Alta de cita desde el calendario (modal, sin redirección) */
 export async function createAppointmentModal(formData: FormData) {
+  await requirePanelSession();
   const raw = Object.fromEntries(formData);
   const parsed = appointmentSchema.safeParse(raw);
   if (!parsed.success) {
@@ -216,6 +219,7 @@ export async function createAppointmentModal(formData: FormData) {
 
 /** Modificación de cita desde el calendario (modal, sin redirección) */
 export async function updateAppointmentModal(formData: FormData) {
+  await requirePanelSession();
   const raw = Object.fromEntries(formData);
   const parsed = appointmentUpdateSchema.safeParse(raw);
   if (!parsed.success) {
@@ -405,6 +409,7 @@ export async function createPublicBooking(formData: FormData) {
 }
 
 export async function updateAppointmentStatus(id: string, status: string) {
+  await requirePanelSession();
   const nextStatus = status as ApptStatus;
   await appointments.updateAppointmentStatus(id, nextStatus);
   revalidatePath("/agenda");
@@ -412,6 +417,7 @@ export async function updateAppointmentStatus(id: string, status: string) {
 }
 
 export async function deleteAppointment(id: string) {
+  await requirePanelSession();
   const existing = await appointments.getAppointment(id);
   if (!existing) {
     throw new Error("Cita no encontrada");
@@ -425,6 +431,7 @@ export async function deleteAppointment(id: string) {
 
 /** Borrado de cita desde modal (sin redirección) */
 export async function deleteAppointmentModal(id: string) {
+  await requirePanelSession();
   try {
     const existing = await appointments.getAppointment(id);
     if (!existing) {

@@ -10,10 +10,12 @@ import {
   updateTherapy,
 } from "@/lib/firestore-therapies";
 import { catalogDbNamesForGroup, findCatalogGroupByKey } from "@/lib/therapies";
+import { requirePanelSession } from "@/lib/panel-page-auth";
 
 export { ensureDefaultOfferedTherapies };
 
 export async function toggleOfferedTherapy(id: string) {
+  await requirePanelSession();
   const therapy = await getTherapy(id);
   if (!therapy) {
     return { error: "Terapia no encontrada" };
@@ -29,6 +31,7 @@ export async function toggleOfferedTherapy(id: string) {
 }
 
 export async function toggleOfferedTherapyGroup(groupKey: string) {
+  await requirePanelSession();
   const group = findCatalogGroupByKey(groupKey);
   if (!group) return { error: "Terapia no encontrada" };
 
@@ -47,6 +50,7 @@ export async function toggleOfferedTherapyGroup(groupKey: string) {
 }
 
 export async function updateOfferedTherapyPrice(id: string, price: number) {
+  await requirePanelSession();
   if (!Number.isFinite(price) || price < 0) {
     return { error: "Indique un precio válido (0 o mayor)" };
   }
@@ -66,6 +70,7 @@ export async function updateOfferedTherapyPrice(id: string, price: number) {
 }
 
 export async function updateOfferedTherapyPriceByName(name: string, price: number) {
+  await requirePanelSession();
   if (!Number.isFinite(price) || price < 0) {
     return { error: "Indique un precio válido (0 o mayor)" };
   }

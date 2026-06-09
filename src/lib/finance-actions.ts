@@ -12,6 +12,7 @@ import * as firestoreClients from "@/lib/firestore-clients";
 import * as firestoreAppointments from "@/lib/firestore-appointments";
 import { getTherapy } from "@/lib/firestore-therapies";
 import type { InvoiceStatus } from "@/lib/firestore-types";
+import { requirePanelSession } from "@/lib/panel-page-auth";
 
 function parseOptionalDate(value?: string) {
   if (!value) return null;
@@ -20,6 +21,7 @@ function parseOptionalDate(value?: string) {
 }
 
 export async function createInvoice(formData: FormData) {
+  await requirePanelSession();
   const patientId = formData.get("patientId") as string;
   const descriptions = formData.getAll("lineDescription") as string[];
   const quantities = formData.getAll("lineQuantity") as string[];
@@ -76,6 +78,7 @@ export async function createInvoice(formData: FormData) {
 }
 
 export async function markAppointmentAsPerformed(appointmentId: string) {
+  await requirePanelSession();
   const appt = await firestoreAppointments.getAppointment(appointmentId);
 
   if (!appt) {
@@ -145,6 +148,7 @@ export async function markAppointmentAsPerformed(appointmentId: string) {
 }
 
 export async function updateInvoiceStatus(id: string, status: string) {
+  await requirePanelSession();
   await firestoreInvoices.updateInvoiceStatus(id, status as InvoiceStatus);
   revalidatePath("/facturacion");
   revalidatePath(`/facturacion/${id}`);
@@ -152,6 +156,7 @@ export async function updateInvoiceStatus(id: string, status: string) {
 }
 
 export async function deleteInvoice(id: string) {
+  await requirePanelSession();
   await firestoreInvoices.deleteInvoice(id);
   revalidatePath("/facturacion");
   revalidatePath("/estadisticas");
@@ -161,6 +166,7 @@ export async function deleteInvoice(id: string) {
 export async function sendInvoiceByEmail(
   invoiceId: string
 ): Promise<{ success: true; email: string } | { error: string }> {
+  await requirePanelSession();
   const invoice = await firestoreInvoices.getInvoice(invoiceId);
 
   if (!invoice) {
@@ -227,6 +233,7 @@ export async function sendInvoiceByEmail(
 }
 
 export async function createExpense(formData: FormData) {
+  await requirePanelSession();
   const raw = Object.fromEntries(formData);
   const parsed = expenseSchema.safeParse(raw);
   if (!parsed.success) throw new Error("Revise los datos del gasto");
@@ -246,6 +253,7 @@ export async function createExpense(formData: FormData) {
 }
 
 export async function deleteExpense(id: string) {
+  await requirePanelSession();
   await firestoreExpenses.deleteExpense(id);
   revalidatePath("/gastos");
   revalidatePath("/estadisticas");

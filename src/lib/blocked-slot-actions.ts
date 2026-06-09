@@ -12,6 +12,7 @@ import {
   createBlockedSlots,
   deleteBlockedSlots,
 } from "@/lib/firestore-blocked-slots";
+import { requirePanelSession } from "@/lib/panel-page-auth";
 
 const ACTIVE_STATUSES = [
   "PENDING_CONFIRMATION",
@@ -51,6 +52,7 @@ async function occupiedSlotTimes(slots: Date[]): Promise<Set<number>> {
 
 /** Bloquea o desbloquea un grupo de tramos en una sola operación */
 export async function toggleBlockedSlots(startAtMsList: number[]) {
+  await requirePanelSession();
   const slots = normalizeSlotKeys(startAtMsList);
   if (slots.length === 0) {
     return { blocked: false };

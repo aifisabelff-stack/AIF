@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { patientSchema, treatmentSchema } from "@/lib/validations";
 import * as firestoreClients from "@/lib/firestore-clients";
 import * as firestoreTreatments from "@/lib/firestore-treatments";
+import { requirePanelSession } from "@/lib/panel-page-auth";
 
 function parseOptionalDate(value?: string) {
   if (!value) return null;
@@ -13,6 +14,7 @@ function parseOptionalDate(value?: string) {
 }
 
 export async function createPatient(formData: FormData) {
+  await requirePanelSession();
   const raw = Object.fromEntries(formData);
   const parsed = patientSchema.safeParse({
     ...raw,
@@ -59,6 +61,7 @@ export async function createPatient(formData: FormData) {
 }
 
 export async function updatePatient(id: string, formData: FormData) {
+  await requirePanelSession();
   const raw = Object.fromEntries(formData);
   const parsed = patientSchema.safeParse({
     ...raw,
@@ -108,6 +111,7 @@ export async function updatePatient(id: string, formData: FormData) {
 }
 
 export async function deletePatient(id: string) {
+  await requirePanelSession();
   await firestoreClients.deleteClient(id);
   revalidatePath("/");
   revalidatePath("/pacientes");
@@ -115,6 +119,7 @@ export async function deletePatient(id: string) {
 }
 
 export async function createTreatment(formData: FormData) {
+  await requirePanelSession();
   const raw = Object.fromEntries(formData);
   const parsed = treatmentSchema.safeParse(raw);
 
@@ -140,6 +145,7 @@ export async function createTreatment(formData: FormData) {
 }
 
 export async function deleteTreatment(id: string, patientId: string) {
+  await requirePanelSession();
   await firestoreTreatments.deleteTreatment(id);
   revalidatePath(`/pacientes/${patientId}`);
 }
