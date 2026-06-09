@@ -6,5 +6,5 @@ export async function getPanelAccessConfig() {
 
 export async function isPanelPasswordProtectionEnabled() {
   const cfg = await getPanelAccessConfig();
-  return cfg.enabled && !!cfg.passwordHash;
+  return !!cfg.passwordHash;
 }

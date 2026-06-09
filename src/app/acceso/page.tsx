@@ -1,7 +1,11 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { LogoMark } from "@/components/brand/logo";
 import { PanelAccessLoginForm } from "@/components/panel/panel-access-login-form";
+import { isPanelPasswordProtectionEnabled } from "@/lib/panel-access";
 import { clearStalePanelLockCookie } from "@/lib/panel-lock-cookie";
+
+export const dynamic = "force-dynamic";
 
 type Props = {
   searchParams: Promise<{ desde?: string }>;
@@ -11,6 +15,11 @@ export default async function AccesoPage({ searchParams }: Props) {
   await clearStalePanelLockCookie();
   const { desde } = await searchParams;
   const redirectTo = desde?.startsWith("/") ? desde : "/panel";
+
+  const protectionEnabled = await isPanelPasswordProtectionEnabled();
+  if (!protectionEnabled) {
+    redirect(redirectTo);
+  }
 
   return (
     <div className="landing-page flex min-h-screen flex-col items-center justify-center px-5 py-10">

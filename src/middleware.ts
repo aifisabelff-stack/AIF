@@ -13,11 +13,11 @@ async function isPanelProtectionEnabled(request: NextRequest): Promise<boolean> 
       headers: { cookie: request.headers.get("cookie") ?? "" },
       cache: "no-store",
     });
-    if (!res.ok) return process.env.NODE_ENV === "production";
+    if (!res.ok) return false;
     const data = (await res.json()) as { enabled?: boolean };
     return data.enabled === true;
   } catch {
-    return process.env.NODE_ENV === "production";
+    return false;
   }
 }
 
@@ -45,6 +45,12 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    "/panel",
+    "/agenda",
+    "/pacientes",
+    "/facturacion",
+    "/gastos",
+    "/estadisticas",
     "/panel/:path*",
     "/agenda/:path*",
     "/pacientes/:path*",

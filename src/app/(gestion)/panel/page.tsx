@@ -26,6 +26,9 @@ export default async function PanelPage() {
     await Promise.all([getDashboardStats(), getPanelAccessSettingsForAdmin()]);
   const profit = monthRevenue - monthExpenses;
 
+  const protectionActive =
+    accessSettings && !("error" in accessSettings) && accessSettings.protectionActive;
+
   return (
     <div className="space-y-8">
       <PageHeader
@@ -33,6 +36,13 @@ export default async function PanelPage() {
         title="Panel de control"
         description="Resumen de clientes, citas y finanzas del mes"
       />
+
+      {accessSettings && !("error" in accessSettings) && !protectionActive && (
+        <div className="rounded-xl border border-amber-300/60 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+          La contraseña de acceso al panel no está activa. Actívela abajo en «Contraseña de acceso al
+          panel» para que se pida al entrar desde la página principal.
+        </div>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Clientes" value={total} icon={<Users className="h-5 w-5" />} variant="rose" />

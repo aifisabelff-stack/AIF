@@ -4,7 +4,7 @@ import { LogoMark } from "@/components/brand/logo";
 export function PanelAccessLink() {
   return (
     <a
-      href="/panel"
+      href="/acceso?desde=/panel"
       className="group relative z-10 mx-auto inline-flex cursor-pointer flex-col items-center rounded-2xl transition-transform hover:scale-[1.02]"
       aria-label="Acceder al panel de gestión"
     >

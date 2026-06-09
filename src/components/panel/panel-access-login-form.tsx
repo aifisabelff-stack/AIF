@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,17 +16,6 @@ export function PanelAccessLoginForm({ redirectTo }: Props) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch("/api/panel/status", { cache: "no-store" })
-      .then(async (res) => {
-        const data = await readResponseJson<{ enabled?: boolean }>(res);
-        if (data && !data.enabled) {
-          window.location.replace(redirectTo);
-        }
-      })
-      .catch(() => {});
-  }, [redirectTo]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

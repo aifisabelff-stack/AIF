@@ -54,7 +54,7 @@ export async function getPanelAccessPublicStatus() {
 
 export async function verifyPanelAccessPassword(password: string) {
   const cfg = await getPanelAccessConfig();
-  if (!cfg.enabled || !cfg.passwordHash) {
+  if (!cfg.passwordHash) {
     await setLockCookie(false);
     await setSessionCookie();
     return { success: true as const, protectionEnabled: false };
