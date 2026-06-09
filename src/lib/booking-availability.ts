@@ -13,7 +13,6 @@ import {
   MORNING_HOURS,
   AFTERNOON_HOURS,
   SLOT_START_MINUTES,
-  buildSlotStart,
   appointmentEndAt,
   appointmentsOverlap,
   agendaSlotsInRange,
@@ -22,6 +21,7 @@ import {
   formatSlotLabel,
 } from "@/lib/agenda-slots";
 import { isSchedulableDay } from "@/lib/holidays";
+import { clinicDateTimeToUtc } from "@/lib/clinic-timezone";
 
 const ACTIVE_STATUSES = [
   "PENDING_CONFIRMATION",
@@ -33,12 +33,17 @@ const ACTIVE_STATUSES = [
 
 export type AppointmentSpan = { startAt: Date; endAt: Date };
 
+function clinicDateKey(day: Date): string {
+  return format(day, "yyyy-MM-dd");
+}
+
 export function enumerateSlotStarts(day: Date): Date[] {
+  const dateKey = clinicDateKey(day);
   const slots: Date[] = [];
   const hours = [...MORNING_HOURS, ...AFTERNOON_HOURS];
   for (const hour of hours) {
     for (const minute of SLOT_START_MINUTES) {
-      slots.push(buildSlotStart(day, hour, minute));
+      slots.push(clinicDateTimeToUtc(dateKey, formatSlotLabel(hour, minute)));
     }
   }
   return slots;
@@ -75,10 +80,16 @@ export function availableSlotsForDay(
 
   if (isBefore(startOfDay(day), startOfDay(now))) return [];
 
+  const dateKey = clinicDateKey(day);
   const times: string[] = [];
-  for (const slotStart of enumerateSlotStarts(day)) {
-    if (isSlotBookable(slotStart, durationMinutes, appointments, blockedMs, now)) {
-      times.push(formatSlotLabel(slotStart.getHours(), slotStart.getMinutes()));
+  const hours = [...MORNING_HOURS, ...AFTERNOON_HOURS];
+  for (const hour of hours) {
+    for (const minute of SLOT_START_MINUTES) {
+      const label = formatSlotLabel(hour, minute);
+      const slotStart = clinicDateTimeToUtc(dateKey, label);
+      if (isSlotBookable(slotStart, durationMinutes, appointments, blockedMs, now)) {
+        times.push(label);
+      }
     }
   }
   return times;

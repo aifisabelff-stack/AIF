@@ -31,11 +31,11 @@ export default async function PanelPage() {
       <PageHeader
         eyebrow="Gestión"
         title="Panel de control"
-        description="Resumen de pacientes, citas y finanzas del mes"
+        description="Resumen de clientes, citas y finanzas del mes"
       />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Pacientes" value={total} icon={<Users className="h-5 w-5" />} variant="rose" />
+        <StatCard label="Clientes" value={total} icon={<Users className="h-5 w-5" />} variant="rose" />
         <StatCard label="Activos" value={active} icon={<UserCheck className="h-5 w-5" />} variant="lavender" />
         <StatCard
           label="Ingresos (mes)"
@@ -94,7 +94,7 @@ export default async function PanelPage() {
         </Card>
 
         <Card
-          title="Pacientes recientes"
+          title="Clientes recientes"
           action={
             <Link href="/pacientes" className="text-sm font-medium text-iaf-600 hover:text-iaf-900">
               Ver todos
@@ -102,7 +102,7 @@ export default async function PanelPage() {
           }
         >
           {recent.length === 0 ? (
-            <p className="text-sm text-iaf-500">Sin pacientes registrados.</p>
+            <p className="text-sm text-iaf-500">Sin clientes registrados.</p>
           ) : (
             <ul className="divide-y divide-iaf-100">
               {recent.map((p) => (

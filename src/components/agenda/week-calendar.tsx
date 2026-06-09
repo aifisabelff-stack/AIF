@@ -1552,18 +1552,7 @@ export function WeekCalendar({
         )}
 
         <div className="space-y-4 bg-cream-50/40 px-4 py-4 sm:px-6 sm:py-5">
-          {monthView ? (
-            <MonthAgendaView
-              monthKey={agendaMonthKey}
-              serverMonthKey={monthKey}
-              initialCounts={monthCounts}
-              refreshSignal={refreshSignal}
-              embedded
-              hideHeaderNav
-            />
-          ) : (
-            <>
-              <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-iaf-200/80 bg-white/90 px-3 py-2.5 text-xs text-iaf-600">
+          <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-iaf-200/80 bg-white/90 px-3 py-2.5 text-xs text-iaf-600">
         <div className="flex items-center gap-2">
           {monthView ? (
             <button
@@ -1761,9 +1750,9 @@ export function WeekCalendar({
             </Link>
           )}
         </div>
-      </div>
+          </div>
 
-      {editMode && !monthView && (
+          {editMode && !monthView && (
         <div className="mt-3 rounded-xl border border-iaf-200/80 bg-white/90 p-3 text-xs text-iaf-700 shadow-sm">
           <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-iaf-700">
             Grupo de opciones
@@ -1851,8 +1840,19 @@ export function WeekCalendar({
             </div>
           )}
         </div>
-      )}
+          )}
 
+          {monthView ? (
+            <MonthAgendaView
+              monthKey={agendaMonthKey}
+              serverMonthKey={monthKey}
+              initialCounts={monthCounts}
+              refreshSignal={refreshSignal}
+              embedded
+              hideHeaderNav
+            />
+          ) : (
+            <>
       <div
         className={cn(
           "overflow-x-auto rounded-xl border-2 bg-white shadow-inner",

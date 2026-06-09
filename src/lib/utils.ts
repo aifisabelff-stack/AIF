@@ -11,6 +11,7 @@ import {
   subMonths,
 } from "date-fns";
 import { es } from "date-fns/locale";
+import { CLINIC_TIMEZONE } from "./clinic-timezone";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -24,6 +25,7 @@ export function formatDate(date: Date | string | null | undefined, style: "short
   if (!date) return "—";
   const d = typeof date === "string" ? new Date(date) : date;
   return d.toLocaleDateString("es-ES", {
+    timeZone: CLINIC_TIMEZONE,
     day: "2-digit",
     month: style === "long" ? "long" : "2-digit",
     year: "numeric",
@@ -32,7 +34,11 @@ export function formatDate(date: Date | string | null | undefined, style: "short
 
 export function formatTime(date: Date | string) {
   const d = typeof date === "string" ? new Date(date) : date;
-  return d.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" });
+  return d.toLocaleTimeString("es-ES", {
+    timeZone: CLINIC_TIMEZONE,
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 export function formatDateTime(date: Date | string) {
